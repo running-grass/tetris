@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use bevy::prelude::*;
-// use bevy_inspector_egui::prelude::*;
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use board::*;
 use common::*;
 use menu::*;
@@ -17,7 +17,12 @@ mod stats;
 const BACKGROUND_COLOR: Color = Color::BLACK;
 
 fn main() {
+
+    #[cfg(target_arch = "wasm32")]
+    console_error_panic_hook::set_once();
+
     App::new()
+
         .insert_resource(Score(0))
         .insert_resource(Lines(0))
         .insert_resource(ClearColor(BACKGROUND_COLOR))
@@ -35,6 +40,7 @@ fn main() {
             TimerMode::Once,
         )))
         .add_plugins(DefaultPlugins)
+        .add_plugin(WorldInspectorPlugin::default())
         .add_state::<AppState>()
         .add_state::<GameState>()
         .add_startup_system(setup_camera)
